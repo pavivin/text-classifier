@@ -1,27 +1,24 @@
-from __future__ import division
+from data import Data
+from naive_bayes_classifier import tokenizer
+from naive_bayes_classifier.classifier import Classifier
+from naive_bayes_classifier.trainer import Trainer
+from configs import config
 
-from collections import defaultdict
-from math import log
-
-
-def train(samples):
-    classes, freq = defaultdict(lambda: 0), defaultdict(lambda: 0)
-    for feats, label in samples:
-        classes[label] += 1  # count classes frequencies
-        for feat in feats:
-            freq[label, feat] += 1  # count features frequencies
-
-    for label, feat in freq:  # normalize features frequencies
-        freq[label, feat] /= classes[label]
-    for c in classes:  # normalize classes frequencies
-        classes[c] /= len(samples)
-
-    return classes, freq  # return P(C) and P(O|C)
+newsTrainer = Trainer(tokenizer.Tokenizer(stop_words=[], signs_to_remove=["?!#%&"]))
 
 
-def classify(classifier, feats):
-    classes, prob = classifier
-    return min(
-        classes.keys(),  # calculate argmin(-log(C|O))
-        key=lambda cl: -log(classes[cl]) + sum(-log(prob.get((cl, feat), 10 ** (-7))) for feat in feats),
-    )
+reader = Data.get_csv_train_data()
+for row in reader:
+    newsTrainer.train(row[config.text_column_name], row[config.theme_column_name])
+
+newsClassifier = Classifier(newsTrainer.data, tokenizer.Tokenizer(stop_words=[], signs_to_remove=["?!#%&"]))
+
+unknownInstance = "деньги"
+classification = newsClassifier.classify(unknownInstance)
+
+predict_class, probability = classification[0]
+print(predict_class, probability)
+if probability == 0.00:
+    predict_class = 'не определено'
+
+print(predict_class)

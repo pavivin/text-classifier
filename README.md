@@ -2,7 +2,7 @@
 Классификатор текстовых сообщений. 
 
 
-Минимальная реализация - программа запускается в консоли и на ввод любого текстового сообщения 
+На ввод любого текстового сообщения 
 отвечает наименованием класса, к которому оно относится. 
 
 Необходимо присвоить один из четырех классов: 
@@ -30,21 +30,8 @@
 
 #####
 
-regex.py -> заданные правила для поиска класса
+_regex.py -> заданные правила для поиска класса
+
 nlp_clean.py -> очистка текста, сравнивание train_data с тестовыми
+
 ml.py -> tf-df, метод ближайших соседей
-
-
-# Очистка текста
-```mermaid
-sequenceDiagram
-    participant dotcom
-    participant iframe
-    participant viewscreen
-    dotcom->>iframe: loads html w/ iframe url
-    iframe->>viewscreen: request template
-    viewscreen->>iframe: html & javascript
-    iframe->>dotcom: iframe ready
-    dotcom->>iframe: set mermaid data on iframe
-    iframe->>iframe: render mermaid
-```

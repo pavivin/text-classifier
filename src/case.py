@@ -1,8 +1,9 @@
 from abc import ABC, abstractmethod
-from typing import Any
+
+import pandas as pd
 
 
 class ABCCase(ABC):
     @abstractmethod
-    def __call__(self, *args: Any, **kwds: Any):
+    def classify_text(self, df: pd.DataFrame):
         ...

@@ -1,17 +1,17 @@
 import re
-from typing import List
+from typing import List, Optional
 
 import pandas as pd
-
-from configs import config
+import typer
 
 from case import ABCCase
+from configs import config
 
 
 class RegexCase(ABCCase):
     slots = ('df',)
 
-    def __call__(self, df: pd.DataFrame):
+    def classify_text(self, df: pd.DataFrame):
         count = 0
 
         data_len = df.shape[0]
@@ -19,27 +19,27 @@ class RegexCase(ABCCase):
         output_list: List[str] = []
 
         for i, df_item in enumerate(df[config.text_column_name]):
-            # кредитная карта - кредитная карта, кредитка
-            # дебетовая карта - !кредитная карта
-            # кредит - деньги, займ, кредит
 
-            local_count = 0
-            local_class = 0
+            local_count: int = 0
+            local_class: Optional[str] = None
+
+            theme = df[config.theme_column_name][i]
 
             for re_item, re_class in config.named_regex.items():
                 if re.search(re_item, df_item):
-                    if df[config.theme_column_name][i] == re_class:
+                    if theme == re_class:
                         local_class = re_class
                         local_count += 1
 
             if local_count == 0:
-                output_str = ''.join((str(i), ') ', 'default', ': ', df_item, ': ', df[config.theme_column_name][i]))
+                output_str = ''.join((str(i), ') ', 'default', ': ', df_item, ': ', theme))
                 output_list.append(output_str)
             else:
-                if local_class == df[config.theme_column_name][i]:
+                if local_class == theme:
                     count += 1
                 else:
-                    print(i, ') ', local_class, ': ', df_item, ': ', df[config.theme_column_name][i])
+                    typer.echo(f'{i}) {local_class}: {df_item} : {theme}')
 
-        print(count, '/', data_len)
-        print((data_len / count) * 100, '%')
+        total_percent = (data_len / count) * 100 if count > 0 else 0
+        typer.echo(f'{count} / {data_len}')
+        typer.echo(f'{total_percent} %')

@@ -1,7 +1,0 @@
-mode:
-
-  file:
-    filename: ''
-
-  cli:
-    path: "data/movies.db"

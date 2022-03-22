@@ -1,13 +1,12 @@
-from typing import Optional
 import typer
 
 
-class BaseException:
-    def __init__(self, message: str, param: Optional[str]):
-        typer.echo(f'{message} {param}')
+class BaseTyperException:
+    def __init__(self, message: str):
+        typer.echo(message, err=True)
         typer.Exit()
 
 
 class NotFoundException:
-    def __init__(self, param: Optional[str]):
-        BaseException(message='Параметр не найден', param=param)
+    def __init__(self, filename: str):
+        BaseTyperException(message=f'Файл не найден: {filename}')
