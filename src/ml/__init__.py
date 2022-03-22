@@ -7,17 +7,14 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.pipeline import Pipeline
 
 from case import ABCCase
+from utils import print_classes, print_statitics
 from configs import config
 from data import Data
 
 
 class MLCase(ABCCase):
-    @staticmethod
-    def __method_color(msg: str):
-        return typer.style(msg, fg=typer.colors.BLUE, bold=True)
-
     def classify_text(self, df: pd.DataFrame):
-        train_doc = Data.get_train_data()
+        train_doc = Data().get_train_data()
         test_doc = df
 
         x_train, y_train = train_doc[config.text_column_name], train_doc[config.theme_column_name]
@@ -32,7 +29,11 @@ class MLCase(ABCCase):
         predicted_sgd = sgd_ppl_clf.predict(x_test)
         predicted_knb = knb_ppl_clf.predict(x_test)
 
-        typer.echo(self.__method_color('sgd_clf'))
-        typer.echo(metrics.classification_report(predicted_sgd, y_test))
-        typer.echo(self.__method_color('knb_clf'))
-        typer.echo(metrics.classification_report(predicted_knb, y_test))
+        count = 0
+
+        for predict_class, right_class in zip(predicted_sgd, train_doc[config.theme_column_name]):
+            if predict_class == right_class:
+                count += 1
+            print_classes(predict_class=predict_class, right_class=right_class)
+
+        print_statitics(data_len=len(df), count=count)

@@ -1,4 +1,5 @@
 import csv
+
 import pandas as pd
 
 from configs import config
@@ -14,8 +15,8 @@ class Data:
     def read_dataframe(filename: str):
         try:
             return pd.read_excel(filename)
-        except FileNotFoundError as e:
-            raise NotFoundException(filename) from e
+        except FileNotFoundError:
+            NotFoundException(filename)
 
     def data_to_csv(self):
         df = pd.ExcelFile(config.xlsx_filename)
@@ -27,17 +28,15 @@ class Data:
         test_data.to_csv(config.test_csv_filename, index=False)
 
     @staticmethod
-    def get_light_data():
-        return pd.read_csv(config.light_train_filename)
+    def get_csv_data(filename: str):
+        df = {config.text_column_name: [], config.theme_column_name: []}
+        for item in csv.DictReader(open(filename)):
+            df[config.text_column_name].append(item[config.text_column_name])
+            df[config.theme_column_name].append(item[config.theme_column_name])
+        return df
 
-    @staticmethod
-    def get_train_data():
-        return pd.read_csv(config.train_csv_filename)
+    def get_train_data(self):
+        return self.get_csv_data(config.train_csv_filename)
 
-    @staticmethod
-    def get_csv_train_data():
-       return [item for item in csv.DictReader(open(config.train_csv_filename))]
-
-    @staticmethod
-    def get_test_data():
-        return pd.read_csv(config.test_csv_filename)
+    def get_test_data(self):
+        return self.get_csv_data(config.test_csv_filename)

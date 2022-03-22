@@ -44,5 +44,7 @@ class Config:
         re_credit: 'кредит',
     }
 
+    default_prob = 0.000000001
+
 
 config = Config()
