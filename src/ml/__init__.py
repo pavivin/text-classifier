@@ -17,6 +17,8 @@ class MLCase(ABCCase):
         train_doc = Data().get_train_data()
         test_doc = df
 
+        data_len = len(df[config.text_column_name])
+
         x_train, y_train = train_doc[config.text_column_name], train_doc[config.theme_column_name]
         x_test, y_test = test_doc[config.text_column_name], test_doc[config.theme_column_name]
 
@@ -36,4 +38,4 @@ class MLCase(ABCCase):
                 count += 1
             print_classes(predict_class=predict_class, right_class=right_class)
 
-        print_statitics(data_len=len(df), count=count)
+        print_statitics(data_len=data_len, count=count)

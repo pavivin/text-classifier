@@ -14,7 +14,7 @@ class RegexCase(ABCCase):
     def classify_text(self, df: pd.DataFrame):
         count = 0
 
-        data_len = df.shape[0]
+        data_len = len(df[config.text_column_name])
 
         output_list: List[str] = []
 

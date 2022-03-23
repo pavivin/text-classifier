@@ -31,6 +31,18 @@ env/bin/activate.ps1
 pip install -r all-requirements.txt
 ```
 
+```bash
+python src/cli.py
+# --method (nlp | ml | regex)
+# --filename (data.xlsx)
+# --input (predict text)
+# --theme (predict class)
+# --build (bool, rebuild default xlsx to csv)
+# data/input_data.xlsx = default xlsx file
+
+python src/cli.py --method nlp --input кредитка --theme кредитная карта
+```
+
 # Требования
 
 

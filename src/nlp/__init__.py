@@ -14,7 +14,7 @@ class NLPCase(ABCCase):
         _tokenizer = Tokenizer()
         class_trainer = Trainer(_tokenizer)
 
-        data_len = df.shape[0]
+        data_len = len(df[config.text_column_name])
         count = 0
 
         for i, df_item in enumerate(df[config.text_column_name]):
